@@ -1,0 +1,207 @@
+inp w
+eql x 0 # TRUE -> x = 1
+mul y 0 # y = 0
+add y w # y = D1
+add y 12 # y = D1 + 12
+add z y # z = D1 + 12
+inp w # w = D2
+eql x 0 # TRUE -> x = 1
+mul y 0 # y = 0
+add y 25 # y = 25
+add y 1 # y = 26
+mul z y # z = 26*(D1 + 12)
+add y 6 # y = D2 + 6
+add z y # z = 26*(D1 + 12) + D2 + 6
+inp w # w = D3
+mul x 0
+add x z # x = 26*(D1 + 12) + D2 + 6
+eql x w # FALSE -> x = 0
+eql x 0 # TRUE -> x = 1
+mul y 0 # y = 0
+add y 25 # y = 25
+add y 1 # y = 26
+mul z y # z = 26**2*(D1 + 12) + 26*(D2 + 6)
+mul y 0 # y = 0
+add y w # y = D3
+add y 4 # y = D3 + 4
+add z y # z = 26**2*(D1 + 12) + 26*(D2 + 6) + (D3 + 4)
+inp w # w = D4
+eql x w
+eql x 0 # x = 1
+mul y 0
+add y 25 # y = 25
+add y 1 # y = 26
+mul z y
+mul y 0
+add y w
+add y 5
+add z y # z = 26**3*(D1 + 12) + 26**2*(D2 + 6) + 26*(D3 + 4) + D4 + 5
+z = [D1 + 12, D2 + 6, D3 + 4, D4 + 5]
+
+inp w
+eql x 0 # x = 1
+mul y 0
+add y 25
+add y 1 # y = 26
+mul z y
+mul y 0
+add y w
+mul y x
+add z y # z = 26**4*(D1+12) + 26**3*(D2+6) + 26**2*(D3+4) + 26*(D4+5) + D5
+
+inp w
+div z 26
+x = D5-7
+eql x w
+eql x 0
+# IF D5-7 == D6: x = 0
+# ELSE: x = 1
+y = 25*x+1
+# IF D5-7 == D6: y = 1
+# ELSE: y = 26
+mul z y
+mul y 0
+add y w
+add y 4 # y = D6 + 4
+mul y x
+add z y
+# If D5-7 != D6: z.append(D6+4)
+# Else: z = [D1+12, D2+6, D3+4, D4+5]
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26 # x = pop(z)
+add x -13
+eql x w
+eql x 0
+# pop(z)-13 == D7: x = 0
+# else: x = 1
+# But this never happens! pop(z) is at most 13, D7 is at least 1
+# So x = 1
+y = 25*x+1 # y = 26
+mul z y
+mul y 0
+add y w
+add y 15
+mul y x
+add z y # z.append(D7+15)
+
+inp w
+mul x 0
+add x z
+mod x 26 # x = z[-1] = D7+15
+add x 10 # x = z[-1] + 10
+eql x w
+eql x 0 # x = 1
+y = 25*x+1 # y = 26
+mul z y
+mul y 0
+add y w
+add y 14
+mul y x
+add z y # z.append(D8+14)
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26 # x = z.pop() = D8+14
+add x -7
+eql x w
+eql x 0
+# If D8+7 == D9: x = 0
+# Else: x = 1
+y = 25*x+1
+mul z y
+mul y 0
+add y w
+add y 6
+mul y x
+add z y
+# If D8+7 != D9: z.append(D9 + 6)
+
+inp w
+mul x 0
+add x z
+mod x 26
+add x 11 x = z[-1] + 11
+eql x w
+eql x 0 # x = 1
+y = 25x + 1
+mul z y
+y = w + 14
+mul y x
+add z y # z.append(D10+14)
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -9 # x = pop(z) - 9 = D10+5
+eql x w
+eql x 0
+# If D10+5 == D11: x = 0
+# Else: x = 1
+y = 25*x+1
+mul z y
+mul y 0
+add y w
+add y 8
+mul y x
+add z y
+# If D10+5 != D11: z.append(D11+8)
+
+
+inp w
+mul x 0
+add x z
+mod x 26 # x = pop(z)
+div z 26
+add x -2
+eql x w
+eql x 0
+y = 25*x+1
+mul z y
+mul y 0
+add y w
+add y 5
+mul y x
+add z y
+# if pop(z) - 2 != D12: z.append(D12+5)
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -9
+eql x w
+eql x 0
+y = 25*x+1
+mul z y
+mul y 0
+add y w
+add y 14
+mul y x
+add z y
+# if pop(z) - 9 != D13: z.append(D13+14)
+
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -14
+eql x w
+eql x 0
+y = 25*x+1
+mul z y
+mul y 0
+add y w
+add y 4
+mul y x
+add z y
+# if pop(z) - 14 != D14: z.append(D14+4)
